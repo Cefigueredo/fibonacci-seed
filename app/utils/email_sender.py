@@ -1,6 +1,12 @@
+import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+
+def validate_email(email):
+    email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+    return re.match(email_regex, email) is not None
 
 
 class EmailSender:
@@ -18,6 +24,15 @@ class EmailSender:
         Send an email using SMTP.
 
         """
+
+        invalid_emails = [
+            email for email in recipient_emails if not validate_email(email)
+        ]
+        if invalid_emails:
+            raise ValueError(
+                f"Invalid email addresses: {', '.join(invalid_emails)}"
+            )
+
         message = MIMEMultipart()
         message["From"] = sender_email
         message["To"] = ", ".join(recipient_emails)

@@ -13,7 +13,7 @@ POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 EMAIL_SENDER= # Add your email here
 EMAIL_PASSWORD= # Add your app password here
-ENVIRONMENT="development"
+ENVIRONMENT="development" # or "testing" for tests
 API_KEY= # Add your API key here
 ```
 
@@ -23,4 +23,10 @@ Run locally in Docker with the following command:
  
 ```bash
 docker-compose up
+```
+
+You can run tests with the following command:
+
+```bash
+pytest tests/
 ```

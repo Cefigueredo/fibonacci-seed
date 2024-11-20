@@ -55,8 +55,8 @@ class Solver:
             sender_email=settings.Settings.EMAIL_SENDER,
             sender_password=settings.Settings.EMAIL_PASSWORD,
             recipient_emails=[
-                settings.Settings.EMAIL_SENDER,
-                "carlos.figueredo@factored.ai",
+                "didier.correa@proteccion.com.co",
+                "correalondon@gmail.com",
             ],
             subject="Fibonacci Seed",
             body=custom_message,
