@@ -6,6 +6,7 @@ load_dotenv()
 
 
 class Settings:
+    DB_SOURCE = os.getenv("DB_SOURCE", "json")
     POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
     POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
     POSTGRES_DB = os.getenv("POSTGRES_DB", "postgres")

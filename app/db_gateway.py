@@ -1,5 +1,6 @@
 import logging
 import time
+from abc import ABC, abstractmethod
 
 import psycopg
 import schemas
@@ -10,7 +11,17 @@ MAX_RETRIES = 3
 RETRY_DELAY = 5  # seconds
 
 
-class DBGateway:
+class DBStrategy(ABC):
+    @abstractmethod
+    def read_fibonacci(self):
+        pass
+
+    @abstractmethod
+    def insert_fibonacci(self, sequences):
+        pass
+
+
+class PostgresStrategy(DBStrategy):
     def __init__(self):
         self.user = settings.Settings.POSTGRES_USER
         self.password = settings.Settings.POSTGRES_PASSWORD
@@ -111,3 +122,34 @@ class DBGateway:
                 )
             )
             raise Exception("Failed to execute database statement")
+
+
+class JSONStrategy(DBStrategy):
+    def __init__(self):
+        self._data = []
+
+    def read_fibonacci(self):
+        return self._data
+
+    def insert_fibonacci(self, datetime, fibonacci):
+        self._data.append({"datetime": datetime, "fibonacci": fibonacci})
+
+
+class DBGateway:
+    def __init__(self):
+        if settings.Settings.DB_SOURCE == "postgres":
+            self.strategy = PostgresStrategy()
+        elif settings.Settings.DB_SOURCE == "json":
+            self.strategy = JSONStrategy()
+        else:
+            raise Exception(
+                f"Invalid DB source: {settings.Settings.DB_SOURCE}. "
+                "Please set the DB_SOURCE environment variable to 'postgres' "
+                "or 'json'."
+            )
+
+    def read_fibonacci(self):
+        return self.strategy.read_fibonacci()
+
+    def insert_fibonacci(self, datetime, fibonacci):
+        self.strategy.insert_fibonacci(datetime, fibonacci)
