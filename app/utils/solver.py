@@ -4,6 +4,8 @@ import db_gateway  # type: ignore
 import settings  # type: ignore
 from utils import email_sender  # type: ignore
 
+db = db_gateway.DBGateway()
+
 
 class Solver:
     def solve(self, datetime: dt | None = None):
@@ -15,8 +17,6 @@ class Solver:
 
         second_digit = minutes % 10
         first_digit = minutes // 10
-
-        db = db_gateway.DBGateway()
 
         result = self._fibonacci(first_digit, second_digit, seconds)
 
